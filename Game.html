@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Game</title>
+		
+		<style>
+			canvas {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				background: transparent;
+			}
+			
+			.fps {
+                position: absolute;
+                 top: 380px;
+                left: 10px;
+                z-index: 0;
+            }
+			
+		</style>
+		
+		
+		<script src="imageRepository.js"></script>
+		<script src="vector2.js"></script>
+		<script src="rectangle.js"></script>
+		<script src="Drawable.js"></script>
+		<script src="input.js"></script>
+		<script src="Entity.js"></script>
+		<script src="Collision.js"></script>
+		
+	</head>
+	
+	<body onload="init()">
+
+		<canvas id="main" width="600" height="360" style="border: solid 1px red;"> didn't work </canvas>
+		
+		<div class="fps"> FPS: <span id="fps">  </span> </div>
+
+        <script src="mainWindow.js"></script>
+		<script src="main.js"></script>
+	</body>
+	
+</html>
