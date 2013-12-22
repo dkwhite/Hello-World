@@ -107,13 +107,13 @@ function Pool(Poolname, maxSize) {
             pool.Remove(Obj);
             pool.push(Obj);
            
-            console.error(Obj.name +
-        	 	" called " 
-        	 	+ pool[0].alive
-        	 	+ pool[1].alive
-        	 	+ pool[2].alive
-        	 	+ pool[3].alive
-        	 	+ pool[4].alive);
+           // console.error(Obj.name +
+        //	 	" called " 
+        //	 	+ pool[0].alive
+        //	 	+ pool[1].alive
+        //	 	+ pool[2].alive
+        //	 	+ pool[3].alive
+        //	 	+ pool[4].alive);
         	
         }
         
@@ -130,12 +130,11 @@ function Pool(Poolname, maxSize) {
         };
         
         this.spawn = function(Obj, x, y, angle) {
-        	//console.error("angle " + angle);
-                Obj.rect.x = x;
-                Obj.rect.y = y;
+                Obj.pos.x = x;
+                Obj.pos.y = y;
                 Obj.angle = angle;
                 Obj.spawn();
-                Obj.alive = true;
+                Obj.alive = true;                
         };
        
 }
@@ -207,9 +206,7 @@ function Entities()
 		
 		 quadTree.clear();
       
-   // Game_Objs.Active.Remove(main.bg);
     quadTree.insert(this.Active);
-   // Game_Objs.Active.unshift(main.bg);
         
         detectCollision();
         
@@ -232,8 +229,6 @@ var Game_Objs = new Entities();
 
 
 function detectCollision() {
-	 // if(main.rock.rect.Intersect(main.player.rect))
-	   //      main.rock.isColliding =true;
 	
         var objects = [];
         quadTree.getAllObjects(objects);

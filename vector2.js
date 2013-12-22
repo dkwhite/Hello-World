@@ -34,10 +34,10 @@ this.Distance = function(vec2){
 function MoveTowards(startVec, endVec, speed){
 	var tmp = new Vector2(endVec.x - startVec.x, endVec.y - startVec.y);
 	tmp = tmp.Normalize();
-	tmp.x *= speed;
-	tmp.y *= speed;
+	startVec.x += tmp.x * speed;
+	startVec.y += tmp.y * speed;
 	
-	return tmp;
+	return startVec;
 };
 
 function GetAngle(vec1, vec2){

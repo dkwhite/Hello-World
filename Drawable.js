@@ -6,8 +6,6 @@ function Drawable() {
 	this.isColliding = false;
 	this.collide_list = new Array();
 	//this.rect = new Rectangle(0, 0, 0, 0); 
-
-	
 	
 	
 	this.init = function(Name, x, y, image, ctx, canvasSize) {
@@ -15,6 +13,7 @@ function Drawable() {
 		this.name= Name;
 		this.image = image;
 		this.rect = new Rectangle(x, y, image.width, image.height);
+		this.pos = new Vector2(x,y);
 		//this.rect.x = x;
 		//this.rect.y = y;
 		//this.rect.width = image.width;
@@ -25,12 +24,23 @@ function Drawable() {
 		this.originX = this.rect.width/2;
         this.originY = this.rect.height/2; 
         
-        this.angle = 0.0;  
+        this.angle = 0.0; 
         
+        this.context;   
+        
+        if(ctx != null){
         this.context = ctx; 
         
         this.canvasWidth = canvasSize.x;
 	    this.canvasHeight = canvasSize.y; 
+        }
+        else
+        {
+        this.context = GameWindow.get().mainContext;
+
+        this.canvasWidth = GameWindow.get().mainCanvas.width;
+	    this.canvasHeight = GameWindow.get().mainCanvas.height; 
+	    }
 	    //this.scale.Set(this.canvasWidth, this.canvasHeight); 
 	    
 	     
@@ -58,9 +68,12 @@ function Drawable() {
 		return !(this.rect.x > (other.rect.width*other.scale) + other.rect.x || other.rect.x > (this.rect.width*this.scale) + this.rect.x || 
 			this.rect.y > (other.rect.height*other.scale) + other.rect.y || other.rect.y > this.rect.height*this.scale + this.rect.y);
 	}
+	
+	this.UpdateRect = function(){ this.rect.x = this.pos.x;	this.rect.y = this.pos.y;};
 
 	// Define abstract function to be implemented in child objects
-	this.spawn = function() {};// this function used for init new new Pool objects
+	this.spawn = function() { this.UpdateRect(); };// this function used for init new new Pool objects
+	
 	this.update = function(){  this.isColliding = false; };
 	
 	this.draw = function() {
