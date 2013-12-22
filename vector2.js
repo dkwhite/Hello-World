@@ -4,12 +4,27 @@ Vector2 = function(x, y)
     this.x = x;
     this.y = y;
 
-this.Set = function(x, y){
+this.set = function(x, y){
     this.x = x;
     this.y = y;
 };
-
+/*
 this.Move = function(vec2){
+    this.x += vec2.x;
+    this.y += vec2.y;
+};
+*/
+this.setV = function( vec){
+    this.x = vec.x;
+    this.y = vec.y;
+};
+
+this.subtract = function( vec){
+    this.x -= vec.x;
+    this.y -= vec.y;
+};
+
+this.add = function(vec2){
     this.x += vec2.x;
     this.y += vec2.y;
 };
@@ -27,6 +42,16 @@ this.Normalize = function(){
 this.Distance = function(vec2){
     return Math.sqrt(((vec2.x - this.x) * (vec2.x - this.x)) + ((this.y - vec2.y) * (this.y - vec2.y)));
 };
+
+this.RotateVector2DClockwise = function( ang)
+{
+ var tmp = this.x;
+ var cosa = Math.cos(ang);
+ var sina = Math.sin(ang);
+
+ this.x = tmp*cosa + this.y*sina;
+ this.y = -tmp*sina + this.y*cosa;
+}
 
 };
 

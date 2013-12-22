@@ -64,9 +64,16 @@ function Drawable() {
     	return false;
     };
     
-    this.Intersect = function(other){	
+    this.Intersect = function(other){
+    	
+    	if(this.angle == 0 && other.angle == 0)	
 		return !(this.rect.x > (other.rect.width*other.scale) + other.rect.x || other.rect.x > (this.rect.width*this.scale) + this.rect.x || 
 			this.rect.y > (other.rect.height*other.scale) + other.rect.y || other.rect.y > this.rect.height*this.scale + this.rect.y);
+		else{
+			this.rect.angle = this.angle;
+			other.rect.angle = other.angle;
+		    return RotRectsCollision(this.rect, other.rect);
+		}
 	}
 	
 	this.UpdateRect = function(){ this.rect.x = this.pos.x;	this.rect.y = this.pos.y;};
@@ -77,8 +84,10 @@ function Drawable() {
 	this.update = function(){  this.isColliding = false; };
 	
 	this.draw = function() {
-		//if(this.isColliding)
-		 //  this.drawRect();
+		
+		if(this.isColliding)
+		   this.drawRect();
+		   
 		this.context.save();   
 		this.rotate(this.angle);
 		
