@@ -1,4 +1,4 @@
-/**
+/** Author Steven Lambert, with minor changes.
 * QuadTree object.
 *
 * The quadrant indexes are numbered as below:

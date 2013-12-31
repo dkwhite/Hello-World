@@ -1,28 +1,164 @@
-// Store Images here
-var imageRepository = new function() {
-/*	
-	this.Names = new Array();
-	this.add = function(name, location){
-		for(i=0; i<Names.length; i++){
-		     if(Name[i] == name)
-		        return Names[i];
+
+var Resourses = (function(){
+	
+function resourses() {
+	this.imageNames = new Array();
+	this.images = new Array();
+	this.soundNames = new Array();
+	this.sounds = new Array();
+	this.soundpoolNames = new Array();
+	this.soundpools = new Array();
+	
+	this.sndFXvolume = .9;
+	this.musicVolume = .25;
+	
+	this.addImg = function(name, fileName){
+		this.imageNames.push(name);
+		var img = new Image();
+		
+		img.src = fileName;
+		
+		this.images.push(img);
+	}
+	
+	this.getImg = function(name){
+		
+		for(var i = 0; i < this.imageNames.length; i++){
+		     if(this.imageNames[i] == name)
+		        return this.images[i];
+		}
+		console.error(name +" not found");
+	}
+/////////////// Sounds	
+	this.addSnd = function(name, fileName, isMusic){
+		this.soundNames.push(name);
+		
+		var snd = new Audio(fileName);
+		   if(isMusic){
+              snd.loop = true;
+              snd.volume = this.musicVolume;
+           }
+           else
+              snd.volume = this.sndFXvolume;
+              
+            snd.load();
+		
+		this.sounds.push(snd);
+	}
+	
+	this.getSnd = function(name){
+		
+		for(var i = 0; i < this.soundNames.length; i++){
+		     if(this.soundNames[i] == name)
+		        return this.sounds[i];
+		}
+		console.error(name +" not found");
+	}
+	
+	this.addSndPool = function(name, fileName, MaxSize){
+		
+		this.soundpoolNames.push(name);
+		
+		var newPool = new SoundPool( fileName, .25, MaxSize);
+			
+		this.soundpools.push(newPool);
+	}
+	
+	this.getSndPool = function(name){
+		
+		for(var i = 0; i < this.soundpoolNames.length; i++){
+		     if(this.soundpoolNames[i] == name){
+		         this.soundpools[i].get();
+		         return;
+		     }
+		}
+		console.error(name +" not found");
+	}
+	
+	this.onloadCallback = function(callback){
+		this.checkResource = window.setInterval(function(){Resourses.get().isLoaded()},10);
+			
+		if (callback && typeof(callback) === "function") {
+            this.callback = callback;
+        }
+        else console.error('callback invalid');
+	}
+	
+
+	this.isLoaded = function(){		
+		
+		for(var i = 0; i < this.soundpools.length; i++){
+		     if(!(this.soundpools[i].isLoaded()) ){
+		         return;
+		     }
 		}
 		
-		name = new Image();
-		this.name.src = this.location;
-	};
-*/	
-	// Define images
-	this.empty = null;
-	this.ship = new Image();
-	this.background = new Image();
-	this.bullet = new Image();
-	this.rock = new Image();
-	this.game = new Image();
-	
-	this.ship.src = "imgs/ship.png";
-	this.background.src = "imgs/bg.png";
-	this.bullet.src = "imgs/bullet.png";
-	this.rock.src = "imgs/rock.png";
-	this.game.src = "imgs/game.jpg";
-};
+		for(var i = 0; i < this.images.length; i++){
+		     if( !(this.images[i].complete) ){  	 
+		        return;	        
+		       }      
+		}
+		
+		for(var i = 0; i < this.sounds.length; i++){
+		     if( !(this.sounds[i].readyState === 4) ){   	
+		        return;	        
+		       }      
+		}
+		
+		window.clearInterval(this.checkResource);
+		console.log('ret true');
+		this.callback();
+
+	}
+};// end resourses class
+
+/**
+* A sound pool to use for the sound effects
+*/
+function SoundPool( fileName, volume, maxSize) {
+        var size = maxSize; // Max bullets allowed in the pool
+        var pool = [];
+        this.pool = pool;
+        var currSound = 0;
+        	
+        	for (var i = 0; i < size; i++) {
+                 // Initalize the object
+                 snd = new Audio(fileName);
+                 snd.volume = volume;
+                 snd.load();
+                 pool[i] = snd;
+             }
+             
+        this.isLoaded = function(){
+        	for (var i = 0; i < size; i++) {
+        		if( !(pool[i].readyState === 4) ){   	
+		        return false;	        
+		       } 
+        	}
+        	return true;
+        }     
+        
+        /*
+         * Plays a sound
+         */
+        this.get = function() {
+                if(pool[currSound].currentTime == 0 || pool[currSound].ended) {
+                        pool[currSound].play();
+                }
+                currSound = (currSound + 1) % size;
+        };
+}
+
+  var instance;
+    return {
+        get: function(){
+            if (instance == null) {
+                instance = new resourses();
+                // Hide the constructor so the returned objected can't be new'd...
+                instance.constructor = null;
+            }          
+            return instance;
+        }
+  };
+
+})();

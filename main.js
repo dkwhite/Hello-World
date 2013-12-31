@@ -1,11 +1,6 @@
 
 var main = new main();
-
-function init()
-{
-	if(main.init())
-		main.start();
-};
+   main.loadResoures();
 
 /////////////////////////////Background
 function Background(){
@@ -16,7 +11,6 @@ function Background(){
 	};
 };
 Background.prototype = new Drawable();
-
 
 /////////////////////////////Rock
 function Rock(){
@@ -82,26 +76,9 @@ function Rock(){
 Rock.prototype = new Drawable();
 Rock.prototype.constructor = Rock;
 
-/////////////////////////////Spawn Rocks
-var Rockcounter = 0;
-function SpawnRocks(){
-	Rockcounter++;
-
-    if(Rockcounter > 200 && Game_Objs.get_Pool_Active_Count("rocks") < 3){
-       	
-      obj = Game_Objs.get_From_Pool("rocks", -50, -50, 0);
-      
-        if(obj)
-           obj.scale = 1;
-            
-       Rockcounter = 0;
-      // console.log("spawn");
-    }		    
-};
-
 /////////////////////////////Bullet
 function Bullet(){
-	this.speed = 5;
+	this.speed = 10;
 	this.alive = false;
 	
 	this.update = function(){
@@ -157,11 +134,14 @@ function Player() {
 			    this.speed = MaxSpeed;	
 		    }
 		
-		    if(KEY_STATUS.space  && counter > 15){
+		    if(KEY_STATUS.space  && counter > 10){
 			    var bulletPos = new Vector2(this.rect.x + this.originX -6, this.rect.y + this.originY);
 			    MoveDirection(bulletPos, this.angle, 20);
 
 			    Game_Objs.get_From_Pool("bullets", bulletPos.x, bulletPos.y, this.angle);
+
+		        Resourses.get().getSndPool('laser');
+			    
 			    counter = 0;
 		    }
 		
@@ -196,51 +176,65 @@ Player.prototype = new Drawable();
 
 function main()
 {
+	this.loadResoures = function(){
+		Resourses.get().addImg('ship',  "imgs/ship.png");
+        Resourses.get().addImg('bg', "imgs/bg.png");
+        Resourses.get().addImg('bullet', "imgs/bullet.png");
+        Resourses.get().addImg('rock', "imgs/rock.png");
+        Resourses.get().addImg('notused', "imgs/game.jpg");
+        
+        Resourses.get().addSnd('bgMusic', "sounds/kick_shock.wav", true);
+        Resourses.get().addSnd('gameOver', "sounds/game_over.wav", true);
+
+        Resourses.get().addSndPool('laser', "sounds/laser.wav", 10);
+        
+        Resourses.get().onloadCallback( function(){main.init()} );
+	};
 
 	this.init = function()
-	{
-		
+	{		
 	    GameWindow.get().init('main');	
-     
-		this.mainCanvas = document.getElementById('main');
 		
-		if (this.mainCanvas.getContext) {
+		if (GameWindow.get().mainCanvas.getContext) {		
 
-			this.mainContext = this.mainCanvas.getContext('2d');
-            
 			// Initialize the objects	
 			this.bg = new Background();
-			this.bg.init("background", 0, 0, imageRepository.background);
+			this.bg.init("background", 0, 0, Resourses.get().getImg('bg') );
 			Game_Objs.add(this.bg);
 					
 			this.player = new Player();
-			this.player.init("player", 20, 150, imageRepository.ship);
+			this.player.init("player", 20, 150, Resourses.get().getImg('ship'));
 			Game_Objs.add(this.player);
 			
 			var rock = new Rock();
-			rock.init("rock", -50, -50, imageRepository.rock);
+			rock.init("rock", -50, -50, Resourses.get().getImg('rock'));
 			Game_Objs.addPool(rock, "rocks", 6);
 			
 			var bullet = new Bullet();
-			bullet.init("bullet", 0, 0, imageRepository.bullet);
+			bullet.init("bullet", 0, 0, Resourses.get().getImg('bullet'));
 			Game_Objs.addPool(bullet, "bullets", 30);
-	
-			return true;
-		} else 
-			return false;
+			
+			document.getElementById('loading').style.display = "none";
+			Resourses.get().getSnd('bgMusic').play();
+			animate();
+		//	return true;
+		}  // else 
+			//return false;
 	}
 	
 	this.start = function(){
+		Resourses.get().getSnd('bgMusic').play();
 		animate();
 	};
 };
-
 
 function animate() {
 	
 	GameWindow.get().Update( true, animate );
 	
 	document.getElementById('fps').innerHTML = GameWindow.get().avgFramerate;
+	
+	ChangeMusic();
 
 	SpawnRocks(); 
     
@@ -248,3 +242,37 @@ function animate() {
            
     Game_Objs.DrawAll();   
 };
+
+/////////////////////////////Change Music
+function ChangeMusic(){
+	//this dosn't work very well because I need a key realease 
+	if(KEY_STATUS.s){	
+		if( Resourses.get().getSnd('bgMusic').paused ){
+		    Resourses.get().getSnd('gameOver').pause();
+            Resourses.get().getSnd('bgMusic').play();
+		}
+		else{       
+            Resourses.get().getSnd('bgMusic').pause();
+            Resourses.get().getSnd('gameOver').play();
+            console.log("background pause")
+		}
+	}	    
+};
+
+/////////////////////////////Spawn Rocks
+var Rockcounter = 0;
+function SpawnRocks(){
+	Rockcounter++;
+
+    if(Rockcounter > 200 && Game_Objs.get_Pool_Active_Count("rocks") < 3){
+       	
+      obj = Game_Objs.get_From_Pool("rocks", -50, -50, 0);
+      
+        if(obj)
+           obj.scale = 1;
+            
+       Rockcounter = 0;
+    }		    
+};
+
+

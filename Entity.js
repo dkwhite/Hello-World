@@ -150,7 +150,7 @@ function Entities()
 	this.add =function(arg){ this.entities.push(arg);}// return this.ID++;}
 	
 	this.addPool =function(obj, Name, size){
-		newPool = new Pool(Name, size);
+		var newPool = new Pool(Name, size);
 		newPool.init(obj);
 		
 		this.pools.push(newPool);

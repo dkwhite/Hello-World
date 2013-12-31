@@ -72,6 +72,10 @@ function Drawable() {
 		else{
 			this.rect.angle = this.angle;
 			other.rect.angle = other.angle;
+			
+			this.rect.scale = this.scale;
+			other.rect.scale = other.scale;
+			
 		    return RotRectsCollision(this.rect, other.rect);
 		}
 	}

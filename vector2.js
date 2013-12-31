@@ -19,12 +19,22 @@ this.setV = function( vec){
     this.y = vec.y;
 };
 
-this.subtract = function( vec){
+this.subtract = function( x, y){
+    this.x -= x;
+    this.y -= y;
+};
+
+this.add = function( x, y){
+    this.x += x;
+    this.y += y;
+};
+
+this.subtractV = function( vec){
     this.x -= vec.x;
     this.y -= vec.y;
 };
 
-this.add = function(vec2){
+this.addV = function(vec2){
     this.x += vec2.x;
     this.y += vec2.y;
 };
