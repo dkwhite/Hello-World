@@ -77,7 +77,7 @@ function QuadTree(boundBox, lvl) {
          */
         this.insert = function(obj) {
                 if (typeof obj === "undefined" ) {
-                	   // console.log("UNDEFINED OBJECT" + obj.rect.x);
+                	   // console.log("UNDEFINED OBJECT" + obj.x);
                         return;
                 }
                 
@@ -135,13 +135,13 @@ function QuadTree(boundBox, lvl) {
                 var horizontalMidpoint = this.bounds.y + this.bounds.height / 2;
                 
                 // Object can fit completely within the top quadrant
-                var topQuadrant = (obj.rect.y < horizontalMidpoint && obj.rect.y + obj.rect.height*obj.scale < horizontalMidpoint);
+                var topQuadrant = (obj.pos.y < horizontalMidpoint && obj.pos.y + obj.height*obj.scale < horizontalMidpoint);
                 // Object can fit completely within the bottom quandrant
-                var bottomQuadrant = (obj.rect.y > horizontalMidpoint);
+                var bottomQuadrant = (obj.pos.y > horizontalMidpoint);
         
                 // Object can fit completely within the left quadrants
-                if (obj.rect.x < verticalMidpoint &&
-                                obj.rect.x + obj.rect.width*obj.scale < verticalMidpoint) {
+                if (obj.pos.x < verticalMidpoint &&
+                                obj.pos.x + obj.width*obj.scale < verticalMidpoint) {
                         if (topQuadrant) {
                                 index = 1;
                         }
@@ -150,7 +150,7 @@ function QuadTree(boundBox, lvl) {
                         }
                 }
                 // Object can fix completely within the right quandrants
-                else if (obj.rect.x > verticalMidpoint) {
+                else if (obj.x > verticalMidpoint) {
                         if (topQuadrant) {
                                 index = 0;
                         }

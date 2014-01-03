@@ -75,14 +75,12 @@ function Pool(Poolname, maxSize) {
         	pool.push(Obj);
         	
         	for (var i = 1; i < size; i++) {
-        	//	var name = Obj.getName();
-        		//console.error(name);
-        		
+
                 var newObj = new Obj.constructor;
-                var canvasSize = new Vector2(Obj.canvasWidth, Obj.canvasHeight)
-                newObj.init(Obj.name, Obj.rect.x, Obj.rect.y, Obj.image, Obj.context, canvasSize);
+                var canvasSize = new Vector2(Obj.canvasWidth, Obj.canvasHeight);
+                newObj.init(Obj.name, Obj.pos.x, Obj.pos.y, Obj.image, Obj.context, canvasSize);
                 newObj.alive = false;
-                newObj.spawn();
+               // newObj.spawn();
                 pool.push(newObj);
             }
             

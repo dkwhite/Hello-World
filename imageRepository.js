@@ -9,8 +9,8 @@ function resourses() {
 	this.soundpoolNames = new Array();
 	this.soundpools = new Array();
 	
-	this.sndFXvolume = .9;
-	this.musicVolume = .25;
+	this.sndFXvolume = .1;// Make Global volume control
+	this.musicVolume = .1;
 	
 	this.addImg = function(name, fileName){
 		this.imageNames.push(name);
@@ -112,17 +112,14 @@ function resourses() {
 	}
 };// end resourses class
 
-/**
-* A sound pool to use for the sound effects
-*/
+
 function SoundPool( fileName, volume, maxSize) {
-        var size = maxSize; // Max bullets allowed in the pool
+        var size = maxSize;
         var pool = [];
         this.pool = pool;
         var currSound = 0;
         	
         	for (var i = 0; i < size; i++) {
-                 // Initalize the object
                  snd = new Audio(fileName);
                  snd.volume = volume;
                  snd.load();
@@ -138,9 +135,6 @@ function SoundPool( fileName, volume, maxSize) {
         	return true;
         }     
         
-        /*
-         * Plays a sound
-         */
         this.get = function() {
                 if(pool[currSound].currentTime == 0 || pool[currSound].ended) {
                         pool[currSound].play();
@@ -154,7 +148,7 @@ function SoundPool( fileName, volume, maxSize) {
         get: function(){
             if (instance == null) {
                 instance = new resourses();
-                // Hide the constructor so the returned objected can't be new'd...
+                // Hide the constructor
                 instance.constructor = null;
             }          
             return instance;
